@@ -35,9 +35,12 @@ rules:
   - ""
   resources:
   - persistentvolumeclaims
+  - persistentvolumeclaims/finalizers
   verbs:
   - create
+  - update
   - delete
+  - get
 - apiGroups:
   - argoproj.io
   resources:
@@ -49,10 +52,6 @@ rules:
   - get
   - list
   - watch
-  - update
-  - patch
-  - delete
-  - create
 - apiGroups:
   - argoproj.io
   resources:
@@ -62,6 +61,21 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - argoproj.io
+  resources:
+    - workflowtaskresults
+  verbs:
+    - list
+    - watch
+    - deletecollection
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - get
+  - list
 - apiGroups:
   - argoproj.io
   resources:
@@ -81,13 +95,6 @@ rules:
   verbs:
   - create
   - patch
-- apiGroups:
-  - ""
-  resources:
-  - serviceaccounts
-  verbs:
-  - get
-  - list
 - apiGroups:
   - "policy"
   resources:
@@ -119,6 +126,8 @@ rules:
   - leases
   verbs:
   - create
+  - get
+  - update
 - apiGroups:
   - coordination.k8s.io
   resources:

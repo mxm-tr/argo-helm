@@ -19,6 +19,7 @@ rules:
   - cronworkflows/finalizers
   - clusterworkflowtemplates
   - clusterworkflowtemplates/finalizers
+  - workflowtaskresults
   verbs:
   - get
   - list
@@ -44,6 +45,7 @@ rules:
   - cronworkflows/finalizers
   - clusterworkflowtemplates
   - clusterworkflowtemplates/finalizers
+  - workflowtaskresults
   verbs:
   - create
   - delete
@@ -68,14 +70,15 @@ rules:
   - workflows/finalizers
   - workfloweventbindings
   - workfloweventbindings/finalizers
-  - workflowtasksets
-  - workflowtasksets/finalizers
   - workflowtemplates
   - workflowtemplates/finalizers
   - cronworkflows
   - cronworkflows/finalizers
   - clusterworkflowtemplates
   - clusterworkflowtemplates/finalizers
+  - workflowtasksets
+  - workflowtasksets/finalizers
+  - workflowtaskresults
   verbs:
   - create
   - delete

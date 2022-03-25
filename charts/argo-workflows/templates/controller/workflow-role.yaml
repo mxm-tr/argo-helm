@@ -24,6 +24,14 @@ rules:
     verbs:
       - get
       - watch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtaskresults
+    verbs:
+      - get
+      - list
+      - watch
   {{- end }}
 
 {{- end }}
