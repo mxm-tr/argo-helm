@@ -82,6 +82,10 @@ Changes in the `CustomResourceDefinition` resources shall be fixed easily by cop
 
 ## Upgrading
 
+### 4.3.*
+
+With this minor version, the notification notifier's `service.slack` is no longer configured by default.
+
 ### 4.0.0 and above
 
 This helm chart version deploys Argo CD v2.3. The Argo CD Notifications and ApplicationSet are part of Argo CD now. You no longer need to install them separately. The Notifications and ApplicationSet components **are bundled into default** Argo CD installation.
@@ -398,11 +402,13 @@ NAME: my-release
 | server.autoscaling.targetCPUUtilizationPercentage | int | `50` | Average CPU utilization percentage for the Argo CD server [HPA] |
 | server.autoscaling.targetMemoryUtilizationPercentage | int | `50` | Average memory utilization percentage for the Argo CD server [HPA] |
 | server.certificate.additionalHosts | list | `[]` | Certificate manager additional hosts |
-| server.certificate.domain | string | `"argocd.example.com"` | Certificate manager domain |
-| server.certificate.enabled | bool | `false` | Enables a certificate manager certificate |
-| server.certificate.issuer.kind | string | `nil` | Certificate manager issuer |
-| server.certificate.issuer.name | string | `nil` | Certificate manager name |
-| server.certificate.secretName | string | `"argocd-server-tls"` | Certificate manager secret name |
+| server.certificate.domain | string | `"argocd.example.com"` | Certificate primary domain (commonName) |
+| server.certificate.duration | string | `""` | The requested 'duration' (i.e. lifetime) of the Certificate. Value must be in units accepted by Go time.ParseDuration |
+| server.certificate.enabled | bool | `false` | Deploy a Certificate resource (requires cert-manager) |
+| server.certificate.issuer.kind | string | `""` | Certificate issuer kind. Either `Issuer` or `ClusterIssuer` |
+| server.certificate.issuer.name | string | `""` | Certificate isser name. Eg. `letsencrypt` |
+| server.certificate.renewBefore | string | `""` | How long before the currently issued certificate's expiry cert-manager should renew the certificate. Value must be in units accepted by Go time.ParseDuration |
+| server.certificate.secretName | string | `"argocd-server-tls"` | The name of the Secret that will be automatically created and managed by this Certificate resource |
 | server.clusterAdminAccess.enabled | bool | `true` | Enable RBAC for local cluster deployments |
 | server.config | object | See [values.yaml] | [General Argo CD configuration] |
 | server.configAnnotations | object | `{}` | Annotations to be added to Argo CD ConfigMap |
@@ -531,7 +537,7 @@ NAME: my-release
 | dex.extraVolumes | list | `[]` | Extra volumes to the dex pod |
 | dex.image.imagePullPolicy | string | `"IfNotPresent"` | Dex imagePullPolicy |
 | dex.image.repository | string | `"ghcr.io/dexidp/dex"` | Dex image repository |
-| dex.image.tag | string | `"v2.30.0"` | Dex image tag |
+| dex.image.tag | string | `"v2.30.2"` | Dex image tag |
 | dex.initContainers | list | `[]` | Init containers to add to the dex pod |
 | dex.initImage.imagePullPolicy | string | `""` (defaults to global.image.imagePullPolicy) | Argo CD init image imagePullPolicy |
 | dex.initImage.repository | string | `""` (defaults to global.image.repository) | Argo CD init image repository |
@@ -646,6 +652,10 @@ NAME: my-release
 | redis-ha.redis.config | object | See [values.yaml] | Any valid redis config options in this section will be applied to each server (see `redis-ha` chart) |
 | redis-ha.redis.config.save | string | `"\"\""` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"argocd"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
+| externalRedis.existingSecret | string | `""` | The name of an existing secret with Redis credentials (must contain key `redis-password`). When it's set, the `externalRedis.password` parameter is ignored |
+| externalRedis.host | string | `""` | External Redis server host |
+| externalRedis.password | string | `""` | External Redis password |
+| externalRedis.port | int | `6379` | External Redis server port |
 
 ## ApplicationSet
 
@@ -766,7 +776,7 @@ NAME: my-release
 | notifications.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | notifications.serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | notifications.serviceAccount.name | string | `"argocd-notifications-controller"` | The name of the service account to use. |
-| notifications.subscriptions | object | `{}` | Contains centrally managed global application subscriptions |
+| notifications.subscriptions | list | `[]` | Contains centrally managed global application subscriptions |
 | notifications.templates | object | `{}` | The notification template is used to generate the notification content |
 | notifications.tolerations | list | `[]` | [Tolerations] for use with node taints |
 | notifications.triggers | object | `{}` | The trigger defines the condition when the notification should be sent |
