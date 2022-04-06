@@ -30,6 +30,7 @@ rules:
   - list
   - watch
   - delete
+  - patch
   {{- if .Values.server.sso }}
 - apiGroups:
   - ""

@@ -36,8 +36,6 @@ spec:
           args:
           - "--configmap"
           - "{{ template "argo-workflows.controller.fullname" . }}-configmap"
-          - "--executor-image"
-          - "{{ .Values.executor.image.registry }}/{{ .Values.executor.image.repository }}:{{ .Values.executor.image.tag | default .Chart.AppVersion }}"
           - "--loglevel"
           - "{{ .Values.controller.logging.level }}"
           - "--gloglevel"

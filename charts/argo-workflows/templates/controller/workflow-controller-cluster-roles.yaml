@@ -52,6 +52,7 @@ rules:
   - get
   - list
   - watch
+  - update
 - apiGroups:
   - argoproj.io
   resources:
